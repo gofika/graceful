@@ -42,17 +42,17 @@ import (
 func main() {
     ctx := context.Background()
     shutdown := graceful.NewShutdown(ctx)
-  	r := http.NewServeMux()
-  	r.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    r := http.NewServeMux()
+    r.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK)
-      	w.Header().Set("Content-Type", "application/text")
-      	w.Write([]byte("Success"))
-  	}))
-  	// Create a HTTP server and bind the router to it, and set wanted address
-  	srv := &http.Server{
-  		  Handler:      r,
-  		  Addr:         ":8080",
-  	}
+        w.Header().Set("Content-Type", "application/text")
+        w.Write([]byte("Success"))
+    }))
+    // Create a HTTP server and bind the router to it, and set wanted address
+    srv := &http.Server{
+        Handler:      r,
+        Addr:         ":8080",
+    }
     // Append closer for graceful shutdown
     shutdown.AppendGracefulClose(func() { srv.Close() })
     // Run graceful shutdown service
