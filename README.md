@@ -16,7 +16,7 @@ Graceful helpers for golang
 To get the package, execute:
 
 ```bash
-go get github.com/gofika/graceful
+go get -u github.com/gofika/graceful
 ```
 
 To import this package, add the following line to your code:
@@ -40,8 +40,7 @@ import (
 )
 
 func main() {
-    ctx := context.Background()
-    shutdown := graceful.NewShutdown(ctx)
+    ctx, _, gracefulClose := NewShutdown(context.Background())
     r := http.NewServeMux()
     r.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK)
@@ -50,13 +49,11 @@ func main() {
     }))
     // Create a HTTP server and bind the router to it, and set wanted address
     srv := &http.Server{
-        Handler:      r,
-        Addr:         ":8080",
+        Handler: r,
+        Addr:    ":8080",
     }
     // Append closer for graceful shutdown
-    shutdown.AppendGracefulClose(func() { srv.Close() })
-    // Run graceful shutdown service
-    go shutdown.Serve()
+    gracefulClose(func() { srv.Close() })
     // Run HTTP server. Server will graceful close util Ctrl+C signal
     if err := srv.ListenAndServe(); err != nil {
         if err != http.ErrServerClosed {
