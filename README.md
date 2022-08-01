@@ -1,4 +1,3 @@
-[![codecov](https://codecov.io/gh/gofika/graceful/branch/main/graph/badge.svg)](https://codecov.io/gh/gofika/graceful)
 [![Build Status](https://github.com/gofika/graceful/workflows/build/badge.svg)](https://github.com/gofika/graceful)
 [![go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/gofika/graceful)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gofika/graceful)](https://goreportcard.com/report/github.com/gofika/graceful)
@@ -40,7 +39,7 @@ import (
 )
 
 func main() {
-    ctx, _, gracefulClose := NewShutdown(context.Background())
+    ctx, _, gracefulClose := graceful.NewShutdown(context.Background())
     r := http.NewServeMux()
     r.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK)
